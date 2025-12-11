@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useWindowStore } from '#store/windowStore';
+import { useGSAP } from '@gsap/react';
 
 const WindowWrapper = (Component, windowKey) => {
   const Wrapper = (props) => {
@@ -9,7 +10,11 @@ const WindowWrapper = (Component, windowKey) => {
     const { isOpen, zIndex } = windowData;
 
     const ref = useRef(null);
+    useGSAP(() => {
+      if(!ref.current || !isOpen) return;
 
+      ref.current.style.display = "block"
+    }, [isOpen])
     // Optional: don't render if not open
     if (!isOpen) return null;
 
