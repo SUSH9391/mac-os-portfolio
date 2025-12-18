@@ -13,8 +13,7 @@ const Terminal = () => {
 
       <div className="techstack">
         <p>
-          <span className="font-bold">@sushmitha % </span>{" "}
-          show tech stack
+          <span className="font-bold">@sushmitha % </span> show tech stack
         </p>
 
         <div className="label">
@@ -24,31 +23,21 @@ const Terminal = () => {
 
         <ul className="content">
           {techStack.map(({ category, items }) => (
-            <li
-              key={category}
-              className="flex items-start gap-2"
-            >
+            <li key={category} className="flex items-center">
               <Check className="check" size={20} />
-
-              <div>
-                <h3 className="font-semibold">{category}</h3>
-                <p>
-                  {items.map((item, i) => (
-                    <span key={i}>
-                      {item}
-                      {i < items.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </p>
-              </div>
+              <h3>{category}</h3>
+              <ul>
+                {items.map((item, i) => (
+                  <li key={i}>{item} {i < items.length - 1 ? ',':' '}</li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
 
         <div className="footnote">
           <p className="flex items-center gap-1">
-            <Check size={20} />
-            3 of 3 stacks loaded successfully (100%)
+            <Check size={20} />5 of 5 stacks loaded successfully (100%)
           </p>
 
           <p className="text-black flex items-center gap-1">
