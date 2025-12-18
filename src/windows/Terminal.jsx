@@ -1,22 +1,7 @@
 import React from "react";
 import WindowWrapper from "#hoc/WindowWrapper";
 import { Check, Flag } from "lucide-react";
-
-// Example data – plug in your real stack here
-const techStack = [
-  {
-    category: "Languages",
-    items: ["Python", "C++", "JavaScript"],
-  },
-  {
-    category: "Frameworks",
-    items: ["React", "Flask", "Django"],
-  },
-  {
-    category: "Tools",
-    items: ["Docker", "Git", "Linux"],
-  },
-];
+import { techStack } from "#constants";
 
 const Terminal = () => {
   return (
@@ -28,7 +13,7 @@ const Terminal = () => {
 
       <div className="techstack">
         <p>
-          <span className="font-bold">@sushmitha %</span>{" "}
+          <span className="font-bold">@sushmitha % </span>{" "}
           show tech stack
         </p>
 
@@ -63,7 +48,7 @@ const Terminal = () => {
         <div className="footnote">
           <p className="flex items-center gap-1">
             <Check size={20} />
-            5 of 5 stacks loaded successfully (100%)
+            3 of 3 stacks loaded successfully (100%)
           </p>
 
           <p className="text-black flex items-center gap-1">
