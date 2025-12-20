@@ -1,7 +1,8 @@
-import { useLayoutEffect, useRef } from 'react';
-import { useWindowStore } from '#store/windowStore';
-import { useGSAP } from '@gsap/react';
-
+import { useLayoutEffect, useRef } from "react";
+import { useWindowStore } from "#store/windowStore";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
 const WindowWrapper = (Component, windowKey) => {
   const Wrapper = (props) => {
     const { focusWindow, windows } = useWindowStore();
@@ -11,14 +12,28 @@ const WindowWrapper = (Component, windowKey) => {
 
     const ref = useRef(null);
     useGSAP(() => {
-      if(!ref.current || !isOpen) return;
+      if (!ref.current || !isOpen) return;
 
-      ref.current.style.display = "block"
-    }, [isOpen])
-    // Optional: don't render if not open
-    
+      ref.current.style.display = "block";
+
+      // Optional: don't render if not open
+      gsap.fromTo(
+        ref.current,
+        { scale: 0.8, opacity: 0, y: 40 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }
+      );
+    }, [isOpen]);
+
+    useGSAP(() => {
+      if (!ref.current || isOpen) return;
+     const[instance] = 
+     Draggable.create(ref.current, {
+       onPress: () => focusWindow(windowKey) });
+      return () => instance.kill();
+    }, [isOpen]);
+
     useLayoutEffect(() => {
-      if(!ref.current) return;
+      if (!ref.current) return;
       ref.current.style.display = isOpen ? "block" : "none";
     }, [isOpen]);
 
@@ -27,15 +42,17 @@ const WindowWrapper = (Component, windowKey) => {
         id={windowKey}
         ref={ref}
         style={{ zIndex }}
-        className="absolute"
-        onClick={() => focusWindow(windowKey)} // if that's how you use it
-      >
+        className="absolute">
         <Component {...props} />
+      
+        
       </section>
     );
   };
 
-  Wrapper.displayName = `WindowWrapper(${Component.displayName || Component.name || "Component"})`;
+  Wrapper.displayName = `WindowWrapper(${
+    Component.displayName || Component.name || "Component"
+  })`;
 
   return Wrapper;
 };
