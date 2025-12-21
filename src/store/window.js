@@ -12,6 +12,7 @@ const useWindowStore = create((set) => ({
         const win = draft.windows?.[windowKey];
         if (!win) return;
         win.isOpen = true;
+        win.isMinimized = false;
         win.zIndex = draft.nextZIndex;
         win.data = data ?? win.data;
         draft.nextZIndex += 1;
@@ -36,6 +37,28 @@ const useWindowStore = create((set) => ({
         if (!win) return;
         win.zIndex = draft.nextZIndex;
         draft.nextZIndex += 1;
+      })
+    ),
+
+  minimizeWindow: (windowKey) =>
+    set((state) =>
+      produce(state, (draft) => {
+        const win = draft.windows?.[windowKey];
+        if (!win) return;
+        win.isMinimized = true;
+        win.isMaximized = false;
+      })
+    ),
+
+  maximizeWindow: (windowKey) =>
+    set((state) =>
+      produce(state, (draft) => {
+        const win = draft.windows?.[windowKey];
+        if (!win) return;
+        win.isMaximized = !win.isMaximized;
+        if (win.isMaximized) {
+          win.isMinimized = false;
+        }
       })
     ),
 }));

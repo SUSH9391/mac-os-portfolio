@@ -8,7 +8,7 @@ const WindowWrapper = (Component, windowKey) => {
     const { focusWindow, windows } = useWindowStore();
 
     const windowData = windows[windowKey] || {};
-    const { isOpen, zIndex } = windowData;
+    const { isOpen, zIndex, isMinimized, isMaximized } = windowData;
 
     const ref = useRef(null);
     useGSAP(() => {
@@ -34,8 +34,22 @@ const WindowWrapper = (Component, windowKey) => {
 
     useLayoutEffect(() => {
       if (!ref.current) return;
-      ref.current.style.display = isOpen ? "block" : "none";
-    }, [isOpen]);
+      ref.current.style.display = isOpen && !isMinimized ? "block" : "none";
+      
+      if (isMaximized && ref.current) {
+        ref.current.style.width = "100vw";
+        ref.current.style.height = "100vh";
+        ref.current.style.top = "0";
+        ref.current.style.left = "0";
+        ref.current.style.transform = "none";
+      } else if (ref.current) {
+        ref.current.style.width = "";
+        ref.current.style.height = "";
+        ref.current.style.top = "";
+        ref.current.style.left = "";
+        ref.current.style.transform = "";
+      }
+    }, [isOpen, isMinimized, isMaximized]);
 
     return (
       <section
