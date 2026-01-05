@@ -4,10 +4,19 @@ import WindowWrapper from "#hoc/WindowWrapper";
 import { locations } from "#constants/index.js";
 import useLocationStore from "#store/location.js";
 import clsx from "clsx";
+import useWindowStore from "#store/window";
 
 const Finder = () => {
+    const {openWindow} = useWindowStore();
   const { activeLocaton, setActiveLocation } = useLocationStore();
-  const openItem = (item) => {}
+  const openItem = (item) => {
+    if(item.filetype === 'pdf') return openWindow('resume')
+    if(item.kind === 'folder') return setActiveLocation(item);
+    if(['fig', 'url'].includes(item.fileType) && item.href)
+        return window.open(item.href, '_blank')
+
+    openWindow(`${item.fileType}${item.kind}`,item);
+  }
   const renderList = (name, items) =>
     <div>
         <h3>{name}</h3>
@@ -36,7 +45,7 @@ const Finder = () => {
         <div className="sidebar">
           
             {renderList('Favorites', Object.values(locations))}
-            {renderList('Work', locations.work.children)}
+            {renderList('My Projects', locations.work.children)}
           </div>
 
            <ul className="content">
